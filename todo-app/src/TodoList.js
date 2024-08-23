@@ -1,9 +1,10 @@
 import React from 'react';
+import { List } from '@mui/material';
 import TodoItem from './TodoItem';
 
 function TodoList({ todos, toggleComplete, removeTodo }) {
     return (
-        <ul>
+        <List>
             {todos.map((todo, index) => (
                 <TodoItem
                     key={index}
@@ -13,7 +14,7 @@ function TodoList({ todos, toggleComplete, removeTodo }) {
                     removeTodo={removeTodo}
                 />
             ))}
-        </ul>
+        </List>
     );
 }
 

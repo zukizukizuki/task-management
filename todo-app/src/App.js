@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { Container, Typography, Paper } from '@mui/material';
 import TodoList from './TodoList';
 import TodoForm from './TodoForm';
+import TrashBin from './TrashBin';
 
 function App() {
     const [todos, setTodos] = useState([]);
+    const [deletedTodos, setDeletedTodos] = useState([]);
 
     const addTodo = (text) => {
         const newTodos = [...todos, { text, completed: false }];
@@ -18,16 +21,28 @@ function App() {
 
     const removeTodo = (index) => {
         const newTodos = [...todos];
-        newTodos.splice(index, 1);
+        const [removedTodo] = newTodos.splice(index, 1);
         setTodos(newTodos);
+        setDeletedTodos([...deletedTodos, removedTodo]);
+    };
+
+    const restoreTodo = (index) => {
+        const restoredTodo = deletedTodos[index];
+        setTodos([...todos, restoredTodo]);
+        setDeletedTodos(deletedTodos.filter((_, i) => i !== index));
     };
 
     return (
-        <div>
-            <h1>ToDo List</h1>
-            <TodoForm addTodo={addTodo} />
-            <TodoList todos={todos} toggleComplete={toggleComplete} removeTodo={removeTodo} />
-        </div>
+        <Container maxWidth="sm" style={{ marginTop: '50px' }}>
+            <Paper style={{ padding: '20px' }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    ToDo List
+                </Typography>
+                <TodoForm addTodo={addTodo} />
+                <TodoList todos={todos} toggleComplete={toggleComplete} removeTodo={removeTodo} />
+            </Paper>
+            <TrashBin deletedTodos={deletedTodos} restoreTodo={restoreTodo} />
+        </Container>
     );
 }
 
